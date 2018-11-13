@@ -114,15 +114,9 @@ const options = [
 
 // Rank answer 1-5 and store that answer to a DB
 export default class CreatableMulti extends React.Component {
-  handleChange = (newValue, actionMeta) => {
-    console.group("Value Changed");
-    console.log(newValue);
-    console.log(`action: ${actionMeta.action}`);
-    console.groupEnd();
-  };
   render() {
     return (
-      <CreatableSelect isMulti onChange={this.handleChange} options={options} />
+      <CreatableSelect {...this.props} />
     );
   }
 }
@@ -130,6 +124,8 @@ export default class CreatableMulti extends React.Component {
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
+
     this.state = { value: [{ value: "Go", label: "Go" }] };
   }
   onChange(event) {
@@ -137,27 +133,27 @@ class App extends React.Component {
   }
 
   pickWord(word) {
-    debugger;
     const newValue = [...this.state.value, word];
     this.setState({ value: newValue });
+    console.log(this.state.value);
   }
-
+  handleChange(newValue, actionMeta){
+    console.group("Value Changed");
+    console.log('new value', newValue);
+    console.log(`action: ${actionMeta.action}`);
+    console.groupEnd();
+    debugger
+    this.setState({ value: newValue });
+  }
+  onSubmit() {
+    console.log(this.state.value);
+  }
   render() {
     return (
       <div className="App">
         <h1>Hello CodeSandbox</h1>
         <h2>Start editing to see some magic happen!</h2>
-        <Select
-          isMulti
-          options={options}
-          value={this.state.value}
-          onChange={this.vla}
-        />
-        <CreatableMulti
-          options={options}
-          value={this.state.value}
-          onChange={this.vla}
-        />
+        <CreatableMulti isMulti value={this.state.value} onChange={this.handleChange} options={options} />
 
         {options.map((word, key) => (
           <button
@@ -168,15 +164,11 @@ class App extends React.Component {
             {word.value}
           </button>
         ))}
+        <br />
+        <button onClick={this.onSubmit}>submit</button>
       </div>
     );
   }
-
-  vla = (value, action) => {
-    this.setState({
-      value: value
-    });
-  };
 }
 
 const rootElement = document.getElementById("root");
