@@ -142,7 +142,6 @@ class App extends React.Component {
     console.log('new value', newValue);
     console.log(`action: ${actionMeta.action}`);
     console.groupEnd();
-    debugger
     this.setState({ value: newValue });
   }
   onSubmit() {
@@ -153,7 +152,7 @@ class App extends React.Component {
       <div className="App">
         <h1>Hello CodeSandbox</h1>
         <h2>Start editing to see some magic happen!</h2>
-        <CreatableMulti isMulti value={this.state.value} onChange={this.handleChange} options={options} />
+        <CreatableSelect isMulti value={this.state.value} onChange={this.handleChange} options={options} />
 
         {options.map((word, key) => (
           <button
