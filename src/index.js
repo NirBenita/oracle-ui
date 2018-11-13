@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Button, List } from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
 import CreatableSelect from "react-select/lib/Creatable";
 
 import "./styles.css";
@@ -112,9 +114,9 @@ const defaultOptions = [
 // Takes the answer and reads it through TTS
 
 // Rank answer 1-5 and store that answer to a DB
-const createOption = (label) => ({
+const createOption = label => ({
   label,
-  value: label.toLowerCase().replace(/\W/g, ''),
+  value: label.toLowerCase().replace(/\W/g, "")
 });
 
 class App extends React.Component {
@@ -147,8 +149,7 @@ class App extends React.Component {
     console.group("Option created");
     console.log("Wait a moment...");
     setTimeout(() => {
-      const { options,value  } = this.state;
-      debugger;
+      const { options, value } = this.state;
       const newOption = createOption(inputValue);
       console.log(newOption);
       console.groupEnd();
@@ -159,6 +160,7 @@ class App extends React.Component {
       });
     }, 1000);
   };
+
   onSubmit() {
     console.log(this.state.value);
   }
@@ -166,8 +168,8 @@ class App extends React.Component {
     const { value, options, isLoading } = this.state;
     return (
       <div className="App">
-        <h1>Hello CodeSandbox</h1>
-        <h2>Start editing to see some magic happen!</h2>
+        <h1>Welcome to the Oracle</h1>
+        <h2>Compose a sentance using the words below, or by writing down words which aren't on the list</h2>
         <CreatableSelect
           isMulti
           isDisabled={isLoading}
@@ -177,19 +179,21 @@ class App extends React.Component {
           onChange={this.handleChange}
           options={options}
         />
+                <Button onClick={this.onSubmit} primary content="submit" />
 
-        {options.map((word, key) => (
-          <button
-            key={key}
-            onClick={() =>
-              this.pickWord({ value: word.value, label: word.label })
-            }
-          >
-            {word.value}
-          </button>
-        ))}
-        <br />
-        <button onClick={this.onSubmit}>submit</button>
+        <div>
+          {options.map((word, key) => (
+              <Button
+              style={{margin:'8px'}}
+                key={key}
+                onClick={() =>
+                  this.pickWord({ value: word.value, label: word.label })
+                }
+              >
+                {word.value}
+              </Button>
+          ))}
+        </div>
       </div>
     );
   }
