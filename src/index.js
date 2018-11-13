@@ -1,11 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Select from "react-select";
 import CreatableSelect from "react-select/lib/Creatable";
 
 import "./styles.css";
 
-const options = [
+const defaultOptions = [
   { value: "Can", label: "Can" },
   { value: "He", label: "He" },
   { value: "A", label: "A" },
@@ -113,49 +112,75 @@ const options = [
 // Takes the answer and reads it through TTS
 
 // Rank answer 1-5 and store that answer to a DB
-export default class CreatableMulti extends React.Component {
-  render() {
-    return (
-      <CreatableSelect {...this.props} />
-    );
-  }
-}
+const createOption = (label) => ({
+  label,
+  value: label.toLowerCase().replace(/\W/g, ''),
+});
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+    this.handleCreate = this.handleCreate.bind(this);
 
-    this.state = { value: [{ value: "Go", label: "Go" }] };
+    this.state = { options: defaultOptions, value: [], isLoading: false };
   }
   onChange(event) {
     this.setState({ value: event.target.value });
   }
 
   pickWord(word) {
-    const newValue = [...this.state.value, word];
+    const { value } = this.state;
+    const newValue = [...value, word];
     this.setState({ value: newValue });
-    console.log(this.state.value);
+    console.log(value);
   }
-  handleChange(newValue, actionMeta){
+  handleChange(newValue, actionMeta) {
     console.group("Value Changed");
-    console.log('new value', newValue);
+    console.log("new value", newValue);
     console.log(`action: ${actionMeta.action}`);
     console.groupEnd();
     this.setState({ value: newValue });
   }
+  handleCreate = inputValue => {
+    this.setState({ isLoading: true });
+    console.group("Option created");
+    console.log("Wait a moment...");
+    setTimeout(() => {
+      const { options,value  } = this.state;
+      debugger;
+      const newOption = createOption(inputValue);
+      console.log(newOption);
+      console.groupEnd();
+      this.setState({
+        isLoading: false,
+        options: [...options, newOption],
+        value: [...value, newOption]
+      });
+    }, 1000);
+  };
   onSubmit() {
     console.log(this.state.value);
   }
   render() {
+    const { value, options, isLoading } = this.state;
     return (
       <div className="App">
         <h1>Hello CodeSandbox</h1>
         <h2>Start editing to see some magic happen!</h2>
-        <CreatableSelect isMulti value={this.state.value} onChange={this.handleChange} options={options} />
+        <CreatableSelect
+          isMulti
+          isDisabled={isLoading}
+          isLoading={isLoading}
+          onCreateOption={this.handleCreate}
+          value={value}
+          onChange={this.handleChange}
+          options={options}
+        />
 
         {options.map((word, key) => (
           <button
+            key={key}
             onClick={() =>
               this.pickWord({ value: word.value, label: word.label })
             }
