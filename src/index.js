@@ -129,7 +129,7 @@ class App extends React.Component {
       value: [],
       isLoading: false,
       answer: "no answer for you, come back one year",
-      modalVisible: true
+      modalVisible: false
     };
   }
   onChange(event) {
@@ -191,9 +191,11 @@ class App extends React.Component {
 
     // let msg = new SpeechSynthesisUtterance(this.state.answer);
     // window.speechSynthesis.speak(msg);
-    this.setState({ value: [] });
+    this.setState({ value: [], modalVisible:true });
   }
-  handleAnswer() {}
+  handleAnswer() {
+    this.setState({ modalVisible:false });
+  }
   render() {
     const { value, options, isLoading, modalVisible } = this.state;
     const settings = {
