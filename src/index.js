@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Button, List } from "semantic-ui-react";
+import { Button, Label, Input, Header } from "semantic-ui-react";
+import { Slider } from "react-semantic-ui-range";
 import "semantic-ui-css/semantic.min.css";
 import CreatableSelect from "react-select/lib/Creatable";
 
@@ -121,12 +122,14 @@ class App extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAnswer = this.handleAnswer.bind(this);
 
     this.state = {
       options: defaultOptions,
       value: [],
       isLoading: false,
-      answer: "no answer for you, come back one year"
+      answer: "no answer for you, come back one year",
+      modalVisible: true
     };
   }
   onChange(event) {
@@ -178,9 +181,7 @@ class App extends React.Component {
       questions_to_ask: "whaaaaat?"
     };
     fetch(url, params)
-      .then(response => {
-        console.log(response);
-      })
+      .then(response => response)
       .then(data => {
         console.log(data);
       });
@@ -192,8 +193,62 @@ class App extends React.Component {
     // window.speechSynthesis.speak(msg);
     this.setState({ value: [] });
   }
+  handleAnswer() {}
   render() {
-    const { value, options, isLoading } = this.state;
+    const { value, options, isLoading, modalVisible } = this.state;
+    const settings = {
+      start: 5,
+      min: 0,
+      max: 10,
+      step: 1
+    };
+    let modal = undefined;
+    debugger
+    if (modalVisible) {
+      modal = (
+        <div
+          className="modal"
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "fixed",
+            top: 0,
+            background: "#fff",
+            padding: "48px"
+          }}
+        >
+          <div
+            style={{
+              margin: "0 auto",
+              maxWidth: "900px",
+              display: "flex",
+              flexDirection: "column"
+            }}
+          >
+            <Header dividing>How relevant was it to the question?</Header>
+            <div style={{ display: "flex", width: "100%", padding: "24px 0" }}>
+              <Label style={{ flex: 1 }}>Nothing to do with it</Label>
+              <div style={{ flex: 2 }}>
+                <Slider color="red" inverted={false} settings={settings} />
+              </div>
+              <Label style={{ flex: 1 }}>Spot on</Label>
+            </div>
+          </div>
+          <Header dividing>How good was it?</Header>
+          <div style={{ display: "flex", width: "100%", padding: "24px 0" }}>
+            <Label style={{ flex: 1 }}>Lame!</Label>
+            <div style={{ flex: 2 }}>
+              <Slider color="red" inverted={false} settings={settings} />
+            </div>
+            <Label style={{ flex: 1 }}>Super funny and clever</Label>
+          </div>
+          <Header dividing>Could you offer a funnier question?</Header>
+          <Input type="text" placeholder="Funnier question" />
+          <Button onClick={this.handleAnswer} primary content="submit" />
+        </div>
+      );
+    }
+
     return (
       <div className="App">
         <h1>Welcome to the Oracle</h1>
@@ -224,6 +279,7 @@ class App extends React.Component {
             </Button>
           ))}
         </div>
+        {modal}
       </div>
     );
   }
