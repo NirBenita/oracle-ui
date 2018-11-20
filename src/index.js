@@ -168,19 +168,26 @@ class App extends React.Component {
     this.state.value.map(word => {
       question = `${(question, word.value)}`;
     });
-    const url = "https://0zblxdjtm3.execute-api.eu-central-1.amazonaws.com/production/ask_question"
+    const url =
+      "https://0zblxdjtm3.execute-api.eu-central-1.amazonaws.com/production/ask_question";
     const params = {
-      mode: 'cors',
+      mode: "cors",
       headers: {
-        'Access-Control-Allow-Origin':'*'
+        "Access-Control-Allow-Origin": "*"
       },
       questions_to_ask: "whaaaaat?"
-    }
-    fetch(url, params).then(response=>{console.log(response)}).then(data=>{console.log(data)})
+    };
+    fetch(url, params)
+      .then(response => {
+        console.log(response);
+      })
+      .then(data => {
+        console.log(data);
+      });
     console.log(question);
 
     // TODO: Get answer from server and update state
-    
+
     // let msg = new SpeechSynthesisUtterance(this.state.answer);
     // window.speechSynthesis.speak(msg);
     this.setState({ value: [] });
