@@ -174,11 +174,12 @@ class App extends React.Component {
     const url =
       "https://0zblxdjtm3.execute-api.eu-central-1.amazonaws.com/production/ask_question";
     const params = {
+      method: "POST",
       mode: "cors",
       headers: {
         "Access-Control-Allow-Origin": "*"
       },
-      questions_to_ask: "whaaaaat?"
+      data: { question: "whaaaaat?" }
     };
     fetch(url, params)
       .then(response => response)
@@ -191,10 +192,10 @@ class App extends React.Component {
 
     // let msg = new SpeechSynthesisUtterance(this.state.answer);
     // window.speechSynthesis.speak(msg);
-    this.setState({ value: [], modalVisible:true });
+    this.setState({ value: [], modalVisible: true });
   }
   handleAnswer() {
-    this.setState({ modalVisible:false });
+    this.setState({ modalVisible: false });
   }
   render() {
     const { value, options, isLoading, modalVisible } = this.state;
@@ -205,7 +206,7 @@ class App extends React.Component {
       step: 1
     };
     let modal = undefined;
-    debugger
+    // debugger
     if (modalVisible) {
       modal = (
         <div
